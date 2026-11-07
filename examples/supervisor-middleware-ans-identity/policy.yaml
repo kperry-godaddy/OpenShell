@@ -1,0 +1,37 @@
+# SPDX-FileCopyrightText: Copyright (c) 2025-2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+# Sandbox policy for the ANS identity example. The smoke test renders the same
+# policy with the live callee port; this copy shows the shape. The workload may
+# POST /v1/tasks to the reference callee on the gateway host, and the ANS
+# middleware signs every such request. It runs last in the chain and blocks the
+# request when it cannot sign.
+version: 1
+
+network_middlewares:
+  ans-identity:
+    name: ANS identity
+    middleware: ans-identity-example
+    order: 100
+    on_error: fail_closed
+    endpoints:
+      include:
+        - host.openshell.internal
+    config:
+      mode: sign
+      identity: example-agent
+
+network_policies:
+  callee:
+    name: callee
+    endpoints:
+      - host: host.openshell.internal
+        port: 8443
+        protocol: rest
+        enforcement: enforce
+        rules:
+          - allow:
+              method: POST
+              path: /v1/tasks
+    binaries:
+      - path: /usr/bin/curl

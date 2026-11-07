@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: Copyright (c) 2025-2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+# Middleware registration for the ANS identity example. The smoke test renders
+# the complete gateway configuration, including gateway authentication and the
+# Docker driver, with the addresses and certificates of the run; this fragment
+# shows the registration it adds. OpenShell authenticates the service by the
+# CA that issued its serving certificate and requires the request hook, so a
+# service that stops advertising it is refused instead of silently skipped.
+
+[[openshell.supervisor.middleware]]
+name = "ans-identity-example"
+grpc_endpoint = "https://<reachable-middleware-host>:50051"
+tls_ca_cert_path = "/path/to/example-ca.pem"
+max_payload_bytes = 1048576
+timeout = "2s"
+binding_policy = "allowlist"
+bindings = ["http_request_pre_credentials"]

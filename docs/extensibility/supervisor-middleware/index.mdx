@@ -74,6 +74,8 @@ Attach built-in middleware, register your own service, choose failure behavior, 
 
 A middleware service is a gRPC server that implements the services in [`proto/supervisor_middleware.proto`](https://github.com/NVIDIA/OpenShell/blob/main/proto/supervisor_middleware.proto). The [content guard example](https://github.com/NVIDIA/OpenShell/tree/main/examples/supervisor-middleware-content-guard) is a complete service you can start from.
 
+The [ANS identity example](https://github.com/NVIDIA/OpenShell/tree/main/examples/supervisor-middleware-ans-identity) runs an external request-signing service against a real gateway and sandbox. It attaches a verifiable agent identity to each allowed request while the signing key stays outside the sandbox, and a receiving service verifies the identity.
+
 <Warning>
 
 The middleware API is still evolving. Future versions will change it to make the contract consistent across HTTP requests, HTTP responses, and WebSocket messages. Expect to update your service when you upgrade OpenShell. [Protocol negotiation](/extensibility/overview#protocol-negotiation) detects incompatible versions at startup.
